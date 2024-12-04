@@ -4,11 +4,13 @@ namespace Invoice.API.DTOs
 {
     public class AddressDTO
     {
-        [Key]
-        public int Id { get; set; }
-        public string Street { get; set; }
-        public string City { get; set; }
-        public string PostCode { get; set; }
-        public string Country { get; set; }
+        [Required]
+        public required string Street { get; set; }
+        [Required]
+        public required string City { get; set; }
+        [Required]
+        public required string PostCode { get; set; }
+        [Required]
+        public required string Country { get; set; }
     }
 }

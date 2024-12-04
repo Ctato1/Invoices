@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Invoice.API.Entities
 {
@@ -12,20 +13,12 @@ namespace Invoice.API.Entities
         public int PaymentTerms { get; set; }
         public string ClientName { get; set; }
         public string ClientEmail { get; set; }
-        public string Status { get; set; } = "pending";
+        public string Status { get; set; }
+
         public Address SenderAddress { get; set; }
         public Address ClientAddress { get; set; }
-        public ICollection<InvoiceItem> Items { get; set; } = new List<InvoiceItem>();
+        public ICollection<Item> Items { get; set; }
         public double Total { get; set; }
 
-        public int SenderAddressId { get; set; }
-        public int ClientAddressId { get; set; }
-
-        // Constructor to ensure proper initialization
-        public InvoiceEntity()
-        {
-            CreatedAt = DateTime.Now;  // Set CreatedAt to current date on instantiation
-            PaymentDue = DateTime.Now.AddDays(30);  // Default PaymentDue to 30 days after CreatedAt (or you can calculate based on PaymentTerms)
-        }
     }
 }

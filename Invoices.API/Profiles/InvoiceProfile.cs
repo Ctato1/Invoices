@@ -5,12 +5,11 @@ namespace Invoice.API.Profiles
 {
     public class InvoiceProfile : Profile
     {
-        public InvoiceProfile() { 
-        
+        public InvoiceProfile() {
+
             CreateMap<InvoiceEntity, InvoiceDTO>().ReverseMap();
-            CreateMap<InvoiceEntity, InvoicesForCreatingDTO>().ReverseMap();
             CreateMap<Address, AddressDTO>().ReverseMap();
-            CreateMap<InvoiceItem, InvoiceItemDTO>().ReverseMap();
+            CreateMap<Item, ItemDTO>().ReverseMap();
         }
     }
 }

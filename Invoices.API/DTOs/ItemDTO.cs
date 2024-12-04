@@ -2,13 +2,14 @@
 
 namespace Invoice.API.DTOs
 {
-    public class InvoiceItemDTO
+    public class ItemDTO
     {
-        [Key]
-        public int Id { get; set; }
+        [Required]
         public string Name { get; set; }
+        [Required]
         public int Quantity { get; set; }
+        [Required]
         public double Price { get; set; }
-        public double Total { get; set; }
+        public double Total => Quantity * Price;
     }
 }

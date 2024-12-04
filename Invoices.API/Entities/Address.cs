@@ -1,12 +1,15 @@
-﻿namespace Invoice.API.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Invoice.API.Entities
 {
     public class Address
     {
+        [Key]
         public int Id { get; set; }
-        public string Street { get; set; }
-        public string City { get; set; }
-        public string PostCode { get; set; }
-        public string Country { get; set; }
+        public required string Street { get; set; }
+        public required string City { get; set; }
+        public required string PostCode { get; set; }
+        public required string Country { get; set; }
 
     }
 }

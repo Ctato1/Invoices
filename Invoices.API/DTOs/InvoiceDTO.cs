@@ -5,29 +5,20 @@ namespace Invoice.API.DTOs
 {
     public class InvoiceDTO
     {
+        [Key]
         public string Id { get; set; }
-        [Required]
         public DateTime CreatedAt { get; set; }
-        [Required]
         public DateTime PaymentDue { get; set; }
-        [Required]
         public string Description { get; set; }
-        [Required]
-        public int PaymentTerms { get; set; }
-        [Required]
+        public int PaymentTerms { get; set; } 
         public string ClientName { get; set; }
-        [Required]
-        public string ClientEmail { get; set; }
-        public string Status { get; set; } = "pending";
-        [Required]
-        public Address SenderAddress { get; set; }
-        [Required]
-        public Address ClientAddress { get; set; }
-        [Required]
-        public List<InvoiceItem> Items { get; set; } = new List<InvoiceItem>();
-        [Required]
-        public decimal Total { get; set; }
-        public int SenderAddressId { get; set; }
-        public int ClientAddressId { get; set; }
+        public string ClientEmail { get; set; } 
+        public string Status { get; set; } 
+
+        public AddressDTO SenderAddress { get; set; }
+        public AddressDTO ClientAddress { get; set; }
+        public List<ItemDTO> Items { get; set; }
+        public double Total { get; set; } = 0;
     }
+
 }

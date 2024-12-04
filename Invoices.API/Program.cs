@@ -2,6 +2,8 @@ using AutoMapper;
 using Invoice.API.DBContext;
 using Invoice.API.DTOs;
 using Invoice.API.Entities;
+using Invoices.API.EndpointHandler;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,8 +18,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 //for automapper
 //builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddAutoMapper(typeof(Program));  // ??, ?? ???? ?????? ????? ?????????????????
-
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 
 var app = builder.Build();
@@ -29,34 +30,35 @@ app.UseSwaggerUI();
 app.MapGet("/", () => "Hello World!");
 
 
-app.MapGet("/api/invoice/{invoiceId}", async Task<Results<NotFound, Ok<InvoicesForCreatingDTO>>> (InvoiceContext context,
-    IMapper mapper,
-    string invoiceId) =>
-{
-    var invoice = await context.Invoices
-        .Include(x => x.SenderAddress)
-        .Include(x => x.ClientAddress)
-        .Include(x => x.Items)
-        .FirstOrDefaultAsync(x => x.Id == invoiceId);
-
-    if (invoice == null)
-    {
-        return TypedResults.NotFound();
-    }
-
-    var invoiceDTO = mapper.Map<InvoicesForCreatingDTO>(invoice);
-    return TypedResults.Ok(invoiceDTO);
-}).WithName("GetInvoice");
+app.MapGet("/api/invoice/{invoiceId}", InvoiceHandlers.GetInvoicesById).WithName("GetInvoice");
+app.MapGet("/api/invoices", InvoiceHandlers.GetInvoices).WithName("GetInvoices");
+app.MapPost("{invoiceId}/add-item", InvoiceHandlers.AddItemToInvoice);
 
 // Add Invoice
-/*app.MapPost("/api/invoice", async (InvoiceContext context, IMapper mapper, [FromBody] InvoicesForCreatingDTO invoiceCreatingDTO) =>
+/*app.MapPost("/api/invoice", async Task<CreatedAtRoute<InvoiceDTO>>(
+    InvoiceContext context,
+    IMapper mapper,
+    [FromBody] InvoicesForCreatingDTO invoiceCreatingDTO) =>
 {
-    var invoice = mapper.Map<Invoices>(invoiceCreatingDTO);
+    // Map DTO to InvoiceEntity
+    var invoice = mapper.Map<InvoiceEntity>(invoiceCreatingDTO);
+
+    // Add new invoice to context
     context.Add(invoice);
 
+    // Save changes (including InvoiceItems)
     await context.SaveChangesAsync();
 
+    // Return the newly created invoice
+    var invoiceToReturn = mapper.Map<InvoiceDTO>(invoice);
+    return TypedResults.CreatedAtRoute(
+        invoiceToReturn,
+        "GetInvoice",  // The name of the route to fetch the created invoice
+        new { invoiceId = invoiceToReturn.Id }
+    );
+});
+*/
+app.MapPost("/api/invoice", InvoiceHandlers.PostInvoice);
 
-});*/
 
 app.Run();
